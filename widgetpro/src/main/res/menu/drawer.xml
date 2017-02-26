@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:icon="@drawable/ic_favorite_border_black_24dp"
+      android:title="喜欢的话点个赞吧"
+      android:id="@+id/drawer_like"
+    />
+
+</menu>

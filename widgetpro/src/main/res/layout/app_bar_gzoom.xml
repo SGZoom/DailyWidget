@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/main_appbarLyout"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    >
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:id="@+id/main_toolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:id="@+id/main_tablayout"
+        app:tabSelectedTextColor="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_height="wrap_content"/>
+    <!-- 这里我不用指定主题试试-->
+</android.support.design.widget.AppBarLayout>

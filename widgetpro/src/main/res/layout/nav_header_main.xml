@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/nav_header_height"
+              android:background="@drawable/start"
+              android:gravity="bottom"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:id="@+id/github_user_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="15dp"
+        android:clickable="true"
+        android:src="@drawable/ic_slide_menu_avatar_no_login"
+       />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:text="请登录"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/nav_header_username"
+        android:textAppearance="@style/navigation_head_view_textappearance"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="android.studio@android.com"
+        android:visibility="invisible"/>
+
+</LinearLayout>
