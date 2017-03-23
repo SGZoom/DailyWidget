@@ -1214,7 +1214,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         // If we are in the middle of consuming, a scroll, then we want to move the spinner back up
         // before allowing the list to scroll
         Log.e(LOG_TAG,"onNestedPreScroll,dy="+dy+",consume[1]=="+consumed[1]);
-        if (dy > 0 && mTotalUnconsumed > 0 ) {//向下拖dy小于0，所以这是为了处理拖circle到一半然后又缩回去的情况
+        if (dy > 0 && mTotalUnconsumed > 0 && !mRefreshingBottom) {//向下拖dy小于0，所以这是为了处理拖circle到一半然后又缩回去的情况
             if (dy > mTotalUnconsumed) {//拖动的很多，大于未消费的
                 consumed[1] = dy - (int) mTotalUnconsumed;
                 mTotalUnconsumed = 0;
@@ -1226,7 +1226,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         }
 
         //处理底部的,圆圈已经出来了之后它又向下拖
-        if(dy<0 && mTotalUnconsumedBottom > 0 )
+        if(dy<0 && mTotalUnconsumedBottom > 0 && !mRefreshing)
         {
             Log.e("fish","dy<0 && mTotalUnconsumedBottom > 0+++dy=="+dy+",mTotalUnconsumedBottom=="+mTotalUnconsumedBottom);
             if(-dy>mTotalUnconsumedBottom)//如果拖动的很多，就先给圆圈，然后还给子控件
@@ -1272,11 +1272,11 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         Log.e(LOG_TAG,"onStopNestedScroll,mTotalUnconsumed="+mTotalUnconsumed);
         // Finish the spinner for nested scrolling if we ever consumed any
         // unconsumed nested scroll
-        if (mTotalUnconsumed > 0) {
+        if (mTotalUnconsumed > 0 && !mRefreshingBottom) {
             finishSpinner(mTotalUnconsumed);
             mTotalUnconsumed = 0;
         }
-        if(mTotalUnconsumedBottom > 0 )
+        if(mTotalUnconsumedBottom > 0 && !mRefreshing)
         {
             Log.e("fish","onStopNestedScroll,mTotalUnconsumedBottom > 0");
             finishSpinnerBottom(mTotalUnconsumedBottom);
@@ -1302,10 +1302,10 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         // 'offset in window 'functionality to see if we have been moved from the event.
         // This is a decent indication of whether we should take over the event stream or not.
         final int dy = dyUnconsumed + mParentOffsetInWindow[1];
-        if (dy < 0 && !canChildScrollUp()) {//向下
+        if (dy < 0 && !canChildScrollUp() && !mRefreshingBottom) {//向下拉
             mTotalUnconsumed += Math.abs(dy);
             moveSpinner(mTotalUnconsumed);
-        } else if(dy > 0 && !canChildScrollDown())
+        } else if(dy > 0 && !canChildScrollDown() && !mRefreshing) //向上拉
         {
             mTotalUnconsumedBottom +=dy;
             moveBottomSpinner(mTotalUnconsumedBottom);
@@ -1661,7 +1661,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
 
                 if (mIsBeingDragged) {
                     final float overscrollTop = (y - mInitialMotionY) * DRAG_RATE;
-                    if (overscrollTop > 0) {
+                    if (overscrollTop > 0 && !mRefreshingBottom) {
                         moveSpinner(overscrollTop*2);
                     } else {
                         return false;
@@ -1694,7 +1694,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
                     return false;
                 }
 
-                if (mIsBeingDragged) {
+                if (mIsBeingDragged && !mRefreshingBottom) {
                     final float y = ev.getY(pointerIndex);
                     final float overscrollTop = (y - mInitialMotionY) * DRAG_RATE;
                     mIsBeingDragged = false;
