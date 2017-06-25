@@ -18,7 +18,6 @@ package gzoomswiperefresh;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- *2017-02-25 存在问题，就是下面的那个spinnerOffset不好弄，难以矫正
  *
  *
  *
@@ -112,6 +111,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
     private static final int CIRCLE_BG_LIGHT = 0xFFFAFAFA;
     // Default offset in dips from the top of the view to where the progress spinner should stop
     private static final int DEFAULT_CIRCLE_TARGET = 64;
+
     /**底部view上拉最大的大小*/
     private final int mBottomSpinnerOffsetEnd;
 
@@ -257,11 +257,7 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
                         Log.e("fish","mListenerBottom == null");
                     }
                 }
-                //mCurrentTargetOffsetTop = mCircleView.getTop();
                 mCurrentTargetOffsetBottom = mCircleViewBottom.getBottom();
-              //  hd.sendEmptyMessage(0);
-            //    hd.sendEmptyMessageDelayed(0,1000);
-                //这里直接这么做也是无奈之举
             } else {
                 reset();
             }
@@ -281,7 +277,6 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         @Override
         public void onAnimationEnd(Animation animation) {
             if (mRefreshing) {
-                // Make sure the progress view is fully visible
                 mProgress.setAlpha(MAX_ALPHA);
                 mProgress.start();
                 if (mNotify) {
@@ -310,20 +305,15 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         mCircleViewBottom.setVisibility(View.GONE);
 
         setColorViewAlpha(MAX_ALPHA);
-        // Return the circle to its start position
         if (mScale) {
             setAnimationProgress(0 /* animation complete and view is hidden */);
         } else {
             setTargetOffsetTopAndBottom(mOriginalOffsetTop - mCurrentTargetOffsetTop,//往回推
                     true /* requires update */);
             setTargetOffsetTopAndBottomForBottom(mOriginalOffsetBottom - mCurrentTargetOffsetBottom,true);
-            //底部的circle往回推
         }
         mCurrentTargetOffsetTop = mCircleView.getTop();
-
         mCurrentTargetOffsetBottom = mCircleViewBottom.getBottom();
-      //  mCircleViewBottom.clearAnimation();
-
     }
 
     @Override
@@ -334,7 +324,6 @@ public class GZoomSwifrefresh extends ViewGroup implements NestedScrollingParent
         }
     }
 
-    //销毁view的时候调用
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();

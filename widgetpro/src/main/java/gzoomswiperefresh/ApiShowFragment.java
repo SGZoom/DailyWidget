@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by gzoom on 2016/11/27.
+ * 演示用fragment
  */
 
 public class ApiShowFragment extends Fragment {
@@ -37,26 +38,16 @@ public class ApiShowFragment extends Fragment {
 
     @Bind(R.id.main_recycleview)
     RecyclerView recyclerView;
-
-    /**这里不写完整试试，看看他会不会补http(结果报错了哈哈哈哈)*/
-    String BaseUrl="http://gank.io/api/";
-
-
     /**context*/
     Context context;
 
-    /**下部的加载标记*/
-    boolean footIsLoad = false;
-
-    /**间隔，从可视到需要加载的间隔*/
-    static int FOOTNUM = 3;
     SwipeRefreshLayout s;
 
-    /**访问页数*/
-    int pageRead = 0;
+    /**标示个数*/
+    private int index=0;
 
-    /**访问数目*/
-    int readNum = 10;
+    /**数据源*/
+    List<String>datas = new ArrayList<>();
 
 
     /**测试用*/
@@ -65,8 +56,9 @@ public class ApiShowFragment extends Fragment {
     Handler hd = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            addData();
             cancleLoading();
-            super.handleMessage(msg);
+
         }
     };
 
@@ -82,29 +74,9 @@ public class ApiShowFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.temp_fag,container,false);
         ButterKnife.bind(this,view);
-      //  datas = new AndroidMainData();
-    /*   recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-           @Override
-           public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-               super.onScrolled(recyclerView, dx, dy);
-               //计算是否到达底部
-               //这个判断方法不行，如果往回拉还是一样会调用刷新
-               LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-               int totalCount = manager.getItemCount();
-               int last = manager.findLastVisibleItemPosition();
-                if(!footIsLoad&&totalCount<=(last+FOOTNUM))
-                {
-                    loadNewData();
-                }
-
-           }
-       });*/
-        //initAPI();
         initRefreshLayout();
         //初始化recycleview
         initRecycleView();
-        //开始加载
-     //   loadData();
         return view;
     }
 
@@ -116,8 +88,6 @@ public class ApiShowFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new GZoomSwifrefresh.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //loadData();
-                //cancleLoading();
                 hd.sendEmptyMessageDelayed(0,3000);
             }
         });
@@ -129,16 +99,10 @@ public class ApiShowFragment extends Fragment {
             public void onBottomRefresh() {
                 Snackbar.make(recyclerView,"下拉刷新了",Snackbar.LENGTH_SHORT).show();
                 hd.sendEmptyMessageDelayed(0,3000);
-
             }
         });
     }
 
-    /**加载新数据*/
-    private void loadNewData() {
-        Snackbar.make(recyclerView,"需要加载了",Snackbar.LENGTH_SHORT).show();
-
-    }
 
     /**取消加载*/
     public void cancleLoading()
@@ -148,76 +112,30 @@ public class ApiShowFragment extends Fragment {
         refreshLayout.setBottomRefreshing(false);
     }
 
-
-
-
-    /**加载数据*/
-  /*  private void loadData() {
-        applyApi.getAndroidNews(0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<AndroidMainData>() {
-                    @Override
-                    public void call(AndroidMainData androidMainData) {
-                        adapterone.updateDatas(androidMainData);
-                        cancleLoading();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        cancleLoading();
-                    }
-                });
-      //  cancleLoading(*);
-    }*/
-
     /**初始化recycleview*/
     private void initRecycleView() {
-//        datas.results=new ArrayList<>();
-     //   adapterone  = new AndroidMainAdapter(datas,context);
-        List<String>tempS = new ArrayList<>();
+       // List<String>tempS = new ArrayList<>();
         for(int i = 0; i<10 ;i++)
         {
-            tempS.add("GZ");
+            datas.add(index+":GZ");
+            index++;
         }
-        tempAdapter = new TempAdapter(context,tempS);
-        //recyclerView.setAdapter(adapterone);
+        tempAdapter = new TempAdapter(context,datas);
         recyclerView.setAdapter(tempAdapter);
         LinearLayoutManager man = new LinearLayoutManager(context);
         man.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(man);
 
     }
-
-    /**初始化API*/
-   /* private void initAPI() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getOkHttpClient())
-                .build();
-
-                //.client() 先不设置代理看看会不会有错
-        //不会有错但是时间控制不好设置
-        applyApi = retrofit.create(ApplyAPI.class);
-
-    }*/
-
-/* private OkHttpClient getOkHttpClient()
+    /**新增数据*/
+    private void addData()
     {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);//这里是设置日志等级，可以点进去看，有body\basic等等，
-        //这里body是打印网络信息的head还有body
-        return new OkHttpClient.Builder()
-                .retryOnConnectionFailure(true)//出错了的话自己连接
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(60,TimeUnit.SECONDS)
-                .addInterceptor(loggingInterceptor)
-                //.cache()这里我不用缓存，我觉得吧有数据库了不就行了。。。
-                .build();
-
-    }*/
+        for(int i = 0; i<5 ;i++)
+        {
+            datas.add(index+":GZ");
+            index++;
+        }
+        tempAdapter.notifyDataSetChanged();
+    }
 
 }

@@ -56,24 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**初始化tab的内容*/
     private void initTablayout() {
-        tabLayout.addTab(tabLayout.newTab().setText("Android"));
-        tabLayout.addTab(tabLayout.newTab().setText("IOS"));
-        tabLayout.addTab(tabLayout.newTab().setText("Python"));
         List<String>tabs = new ArrayList<>();
-        tabs.add("Android");
-        tabs.add("2");
-        tabs.add("3");
-      //frag1
-       // TempFragment f1 = new TempFragment();
+        tabs.add("testFragemnt");
         ApiShowFragment f1 = new ApiShowFragment();
         frag_list.add(f1);
-        //frag2
-        ApiShowFragment f2 = new ApiShowFragment();
-        frag_list.add(f2);
-        //frag3
-        ApiShowFragment f3 = new ApiShowFragment();
-        frag_list.add(f3);
-
         TabFragmentAdapter adapter = new TabFragmentAdapter(getSupportFragmentManager(),frag_list,tabs);
         viewpager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewpager);
